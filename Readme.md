@@ -1,19 +1,23 @@
 # Employee CRUD System Using Spring Boot and REST APIs
 
 ## Description
-This project is a basic **Employee CRUD System** built using **Spring Boot**. It demonstrates the implementation of **CRUD (Create, Read, Update, Delete)** operations on an employee entity using **REST APIs**. The application integrates with a relational database using Spring Data JPA and allows API requests to be tested using **Postman**.
+This project is a **Employee CRUD System** built using **Spring Boot**. It demonstrates the implementation of **CRUD (Create, Read, Update, Delete)** operations on an employee entity using **REST APIs**. The application integrates with a relational database using Spring Data JPA and allows API requests to be tested using **Postman**.
 
 ## Features
 - Add new employees to the system.
 - Retrieve all employees or fetch specific employee details by ID.
 - Update existing employee details.
 - Delete employees from the system.
-- Error handling for invalid requests.
+- Request validation (name, phone and email) using Bean Validation.
+- Global exception handling with proper HTTP status codes (201, 204, 400, 404).
+- JSON responses for all endpoints.
+- CORS configuration so browser-based clients can call the API.
 
 ## Tech Stack
 - **Programming Language:** Java
 - **Framework:** Spring Boot
-- **Database:** H2 (or other databases configurable via `application.properties`)
+- **Database:** MYSQL / H2 (or other databases configurable via `application.properties`)
+- **Validation:** Spring Boot Starter Validation
 - **Tools:** Postman (for testing APIs)
 - **Dependency Management:** Maven
 
@@ -36,11 +40,15 @@ Before running the application, ensure you have the following installed:
 │   │   ├── Service
 │   │   │   ├── EmployeeService.java
 │   │   │   └── EmployeeServiceImpl.java
+│   │   ├── Exception
+│   │   │   ├── EmployeeNotFoundException.java
+│   │   │   └── GlobalExceptionHandler.java
+│   │   ├── Config
+│   │   │   └── CorsConfig.java
 │   │   └── Employee.java
 │   └── DemoApplication.java
 ├── src/main/resources
 │   ├── application.properties
-│   └── data.sql (optional for seeding data)
 ├── pom.xml
 └── README.md
 ```
@@ -50,48 +58,67 @@ Before running the application, ensure you have the following installed:
 Here are the available API endpoints:
 
 ### 1. Get All Employees
-**GET** `/employees`
-- **Response:**
+**GET** `/api/employees`
+- **Response:** `200 OK`
   ```json
   [
     {
       "id": 1,
       "name": "John Doe",
+      "phone": "9876543210",
       "email": "john.doe@example.com"
     }
   ]
   ```
 
 ### 2. Get Employee by ID
-**GET** `/employees/{id}`
+**GET** `/api/employees/{id}`
 - **Path Variable:**
   - `id`: Employee ID
-- **Response:**
+- **Response:** `200 OK`
   ```json
   {
     "id": 1,
     "name": "John Doe",
+    "phone": "9876543210",
     "email": "john.doe@example.com"
+  }
+  ```
+- **Error:** `404 Not Found`
+  ```json
+  {
+    "message": "Employee with ID 99 not found"
   }
   ```
 
 ### 3. Add a New Employee
-**POST** `/employees`
+**POST** `/api/employees`
 - **Request Body:**
   ```json
   {
     "name": "Jane Doe",
     "email": "jane.doe@example.com",
-    "phone": "1234567890"
+    "phone": "9123456780"
   }
   ```
-- **Response:**
+- **Response:** `201 Created`
   ```json
-  "Saved Successfully"
+  {
+    "id": 2,
+    "name": "Jane Doe",
+    "phone": "9123456780",
+    "email": "jane.doe@example.com"
+  }
+  ```
+- **Error:** `400 Bad Request` when validation fails
+  ```json
+  {
+    "email": "Enter a valid email"
+  }
   ```
 
 ### 4. Update an Employee
-**PUT** `/employees/{id}`
+**PUT** `/api/employees/{id}`
 - **Path Variable:**
   - `id`: Employee ID
 - **Request Body:**
@@ -102,29 +129,26 @@ Here are the available API endpoints:
     "phone": "9876543210"
   }
   ```
-- **Response:**
+- **Response:** `200 OK` with the updated employee
   ```json
-  "Updated"
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "phone": "9876543210",
+    "email": "jane.smith@example.com"
+  }
   ```
+- **Errors:** `400 Bad Request` for invalid data, `404 Not Found` if the ID does not exist
 
 ### 5. Delete an Employee
-**DELETE** `/employees/{id}`
+**DELETE** `/api/employees/{id}`
 - **Path Variable:**
   - `id`: Employee ID
-- **Response:**
-  ```json
-  "Deleted Successfully"
-  ```
+- **Response:** `204 No Content` (empty body)
+- **Error:** `404 Not Found` if the ID does not exist
 
 
 
 ## Testing the APIs
 - Open **Postman** and import the API collection (if provided).
 - Alternatively, manually test the endpoints by sending appropriate requests to the `http://localhost:8080` URL.
-
-## Future Enhancements
-- Add validation for request payloads using Hibernate Validator.
-- Introduce Swagger for API documentation.
-- Use a front-end framework like Angular or React for a user interface.
-- Add authentication and authorization using Spring Security.
-
