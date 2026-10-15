@@ -1,7 +1,7 @@
 # Employee CRUD System Using Spring Boot and REST APIs
 
 ## Description
-This project is a basic **Employee CRUD System** built using **Spring Boot**. It demonstrates the implementation of **CRUD (Create, Read, Update, Delete)** operations on an employee entity using **REST APIs**. The application integrates with a relational database using Spring Data JPA and allows API requests to be tested using **Postman**.
+This project is a **Employee CRUD System** built using **Spring Boot**. It demonstrates the implementation of **CRUD (Create, Read, Update, Delete)** operations on an employee entity using **REST APIs**. The application integrates with a relational database using Spring Data JPA and allows API requests to be tested using **Postman**.
 
 ## Features
 - Add new employees to the system.
@@ -13,7 +13,7 @@ This project is a basic **Employee CRUD System** built using **Spring Boot**. It
 ## Tech Stack
 - **Programming Language:** Java
 - **Framework:** Spring Boot
-- **Database:** H2 (or other databases configurable via `application.properties`)
+- **Database:** MYSQL / H2 (or other databases configurable via `application.properties`)
 - **Tools:** Postman (for testing APIs)
 - **Dependency Management:** Maven
 
@@ -122,9 +122,5 @@ Here are the available API endpoints:
 - Open **Postman** and import the API collection (if provided).
 - Alternatively, manually test the endpoints by sending appropriate requests to the `http://localhost:8080` URL.
 
-## Future Enhancements
-- Add validation for request payloads using Hibernate Validator.
-- Introduce Swagger for API documentation.
-- Use a front-end framework like Angular or React for a user interface.
-- Add authentication and authorization using Spring Security.
+
 
